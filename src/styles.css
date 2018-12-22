@@ -1,0 +1,62 @@
+html,
+body {
+  font-family: sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.omdb-header {
+  padding: 1rem;
+  background: #777;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.omdb-search-input {
+  max-width: 330px;
+  width: 100%;
+  font-size: 1rem;
+}
+.omdb-content {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+.omdb-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.omdb-list-item {
+  border: 1px solid black;
+  padding: 0.5rem 1rem;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 225px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .omdb-list-item {
+    flex: 0 0 225px;
+  }
+}
+.omdb-list-item__media {
+  width: 100%;
+  max-width: calc($omdb-list-item-max-width - 10px);
+  margin-bottom: 0.5rem;
+}
+.omdb-list-item__title {
+  font-size: 1rem;
+}
+.omdb-list-item__type {
+  font-size: 0.8rem;
+}

@@ -1,0 +1,109 @@
+$omdb-header-background: #777;
+
+$omdb-list-item-padding: 0.5rem 1rem;
+$omdb-list-item-font-size: 1rem;
+$omdb-list-item-title-font-size: 1rem;
+$omdb-list-item-type-font-size: 0.8rem;
+$omdb-list-item-border: 1px solid black;
+$omdb-list-item-max-width: 225px;
+
+$xsmall-width: 320px;
+$small-width: 480px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+  @media only screen and (min-device-width: $xsmall-width) and (max-device-width: $small-width) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+html,
+body {
+  font-family: sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.omdb {
+  //Header
+  &-header {
+    padding: 1rem;
+    background: $omdb-header-background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  //Search Input
+  &-search-input {
+    max-width: 330px;
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  //Content
+  &-content {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  //List
+  &-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    //Item
+    &-item {
+      border: $omdb-list-item-border;
+      padding: $omdb-list-item-padding;
+      margin: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 $omdb-list-item-max-width;
+      align-items: center;
+
+      @include desktop() {
+        flex: 0 0 $omdb-list-item-max-width;
+      }
+
+      //Media
+      &__media {
+        width: 100%;
+        max-width: calc($omdb-list-item-max-width - 10px);
+        margin-bottom: 0.5rem;
+      }
+
+      //Title
+      &__title {
+        font-size: $omdb-list-item-title-font-size;
+      }
+
+      //Type
+      &__type {
+        font-size: $omdb-list-item-type-font-size;
+      }
+    }
+  }
+}
