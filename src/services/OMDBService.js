@@ -1,4 +1,44 @@
-import { xhr, fetch } from "../utils/index";
+/**
+ * @description I handle making a request using XHR to the API endpoint.
+ * @param url {String} Endpoint url to request.
+ * @param params {Object} Query parameters to send with request.
+ * @returns {Promise} A promise that resolves JSON data on success.
+ */
+export function xhrRequest(url, params) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        try {
+          let json = JSON.parse(this.responseText);
+          resolve(json);
+        } catch (err) {
+          reject(err);
+        }
+      }
+    });
+    xhr.open("GET", `${url}${new URLSearchParams(params).toString()}`);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send({});
+  });
+}
+/**
+ * @description I handle making a request using fetch to the API endpoint.
+ * @param url {String} Endpoint url to request.
+ * @param params {Object} Query parameters to send with request.
+ * @returns {Promise} A promise that resolves JSON data on success.
+ */
+export function fetchRequest(url, params) {
+  return fetch(new Request(`${url}&${new URLSearchParams(params).toString()}`))
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error, status = ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(json => json);
+}
 
 /**
  * @class OMDBService
@@ -27,9 +67,9 @@ export default class OMDBService {
   request(params) {
     if ("fetch" in window) {
       console.log("Using fetch");
-      return fetch(this.baseUrl, params);
+      return fetchRequest(this.baseUrl, params);
     } else {
-      return xhr(this.baseUrl, params);
+      return xhrRequest(this.baseUrl, params);
     }
   }
   /**
