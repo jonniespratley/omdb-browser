@@ -34,6 +34,7 @@ body {
   list-style-type: none;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .omdb-list-item {
   border: 1px solid black;
@@ -43,6 +44,7 @@ body {
   flex-direction: column;
   flex: 1 0 225px;
   align-items: center;
+  position: relative;
 }
 @media (min-width: 1024px) {
   .omdb-list-item {
@@ -55,8 +57,25 @@ body {
   margin-bottom: 0.5rem;
 }
 .omdb-list-item__title {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 .omdb-list-item__type {
-  font-size: 0.8rem;
+  font-size: 1rem;
+}
+.omdb-list-item__details {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  -webkit-transform: translate3d(190px, 10px, 0);
+          transform: translate3d(190px, 10px, 0);
+  background: #fff;
+  border-radius: 5px;
+  padding: 1rem;
+  border: 1px solid black;
+  transition: ease 0.4s all;
+  z-index: 100;
+}
+.omdb-list-item:hover .omdb-list-item__details {
+  opacity: 1;
+  visibility: visible;
 }

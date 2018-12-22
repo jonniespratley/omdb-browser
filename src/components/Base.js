@@ -8,11 +8,9 @@ export default class Base {
     }
     this.afterRender();
   }
-  beforeRender() {
-  }
+  beforeRender() {}
+  afterRender() {}
   render() {
     return `HTML`;
-  }
-  afterRender() {
   }
 }

@@ -40,6 +40,8 @@ export function fetchRequest(url, params) {
     .then(json => json);
 }
 
+const cache = new Map();
+
 /**
  * @class OMDBService
  * @description Service class for accessing OMDB.
@@ -65,11 +67,13 @@ export default class OMDBService {
    * @returns {Promise} A promise that resolves JSON data on success.
    */
   request(params) {
+    let r = null;
     if ("fetch" in window) {
-      return fetchRequest(this.baseUrl, params);
+      r = fetchRequest(this.baseUrl, params);
     } else {
-      return xhrRequest(this.baseUrl, params);
+      r = xhrRequest(this.baseUrl, params)
     }
+    return r;
   }
   /**
    * @description I search search for movies based on query.
@@ -77,8 +81,16 @@ export default class OMDBService {
    * @returns {Promise} A promise that resolves with movies on success.
    */
   getMovies(s) {
+    if (cache.has(s)) {
+      return Promise.resolve(cache.get(s));
+    }
     return this.request({
       s
+    }).then(resp => {
+      if (resp.Search) {
+        cache.set(s, resp);
+      }
+      return resp;
     });
   }
   /**

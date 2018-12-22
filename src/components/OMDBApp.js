@@ -1,5 +1,4 @@
 import Base from "./Base";
-import OMDBList from "./OMDBList";
 import OMDBService from "../services/OMDBService";
 
 //API service
@@ -8,7 +7,6 @@ const api = new OMDBService("aba065d3");
 export default class OMDBApp extends Base {
   constructor(selector = ".omdb-app", props) {
     super(selector, props);
-   
   }
 
   /**
@@ -34,6 +32,7 @@ export default class OMDBApp extends Base {
       this.fetchMovies(e.target.value);
     }
   }
+
   /**
    * @description I query movies from the API.
    * @param {String} s The query string to search for. 
@@ -49,6 +48,10 @@ export default class OMDBApp extends Base {
       });
   }
 
+  /**
+   * @description I handle creating a movie fragment.
+   * @param {Object} movie A movie object.
+   */
   createMovieFrag(movie) {
     const li = document.createElement('li');
     li.className = 'omdb-list-item';
@@ -71,10 +74,20 @@ export default class OMDBApp extends Base {
     return li;
   }
 
+  /**
+   * @description I handle rendering the movies.
+   * @param {Array} movies An array of movies to render.
+   */
   renderMovies(movies){
-    this.moviesList = new OMDBList();
-    //this.moviesList = new OMDBList();
-    this.moviesList.render(movies);
+    if (!movies) {
+      return;
+    }
+    this.$omdbList.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    movies.forEach(movie => {
+      fragment.appendChild(this.createMovieFrag(movie));
+    });
+    this.$omdbList.appendChild(fragment);
   }
 
   render() {
@@ -91,8 +104,12 @@ export default class OMDBApp extends Base {
   }
 
   afterRender() {
-    this.searchInput = this.ref.querySelector(".omdb-search-input");
-    this.searchInput.addEventListener(
+    this.$omdbList = this.ref.querySelector(".omdb-list");
+    this.$omdbList.addEventListener('mouseover', (e) => {
+      console.log(e.target);
+    })
+    this.$omdbSearchInput = this.ref.querySelector(".omdb-search-input");
+    this.$omdbSearchInput.addEventListener(
       "keyup",
       this.debounce(this.handleSearch.bind(this), 500)
     );
