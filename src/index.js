@@ -4,4 +4,5 @@ import OMDBApp from "./components/OMDBApp";
 
 (() => {
   let app = new OMDBApp("#app");
+  console.log(app);
 })();
