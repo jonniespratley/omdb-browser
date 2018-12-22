@@ -1,8 +1,8 @@
-$omdb-header-background: #777;
+$omdb-header-background: #555;
 
-$omdb-list-item-padding: 0.5rem 1rem;
+$omdb-list-item-padding: 10px;
 $omdb-list-item-font-size: 1rem;
-$omdb-list-item-title-font-size: 1.1rem;
+$omdb-list-item-title-font-size: 1rem;
 $omdb-list-item-type-font-size: 1rem;
 $omdb-list-item-border: 1px solid black;
 $omdb-list-item-max-width: 225px;
@@ -57,7 +57,7 @@ body {
 
   //Search Input
   &-search-input {
-    max-width: 330px;
+    max-width: $xsmall-width;
     width: 100%;
     font-size: 1rem;
   }
@@ -66,6 +66,11 @@ body {
   &-content {
     max-width: 1140px;
     margin: 0 auto;
+    overflow-x: hidden;
+
+    @include tablet() {
+      overflow-x: auto;
+    }
   }
 
   //List
@@ -95,18 +100,11 @@ body {
       //Media
       &__media {
         width: 100%;
-        max-width: calc($omdb-list-item-max-width - 10px);
         margin-bottom: 0.5rem;
-      }
 
-      //Title
-      &__title {
-        font-size: $omdb-list-item-title-font-size;
-      }
-
-      //Type
-      &__type {
-        font-size: $omdb-list-item-type-font-size;
+        @include desktop() {
+          max-width: $omdb-list-item-max-width - $omdb-list-item-padding;
+        }
       }
 
       //Details
@@ -114,22 +112,43 @@ body {
         opacity: 0;
         visibility: hidden;
         position: absolute;
-        transform: translate3d(190px, 10px, 0);
         background: #fff;
         border-radius: 5px;
         padding: 1rem;
         border: 1px solid black;
         transition: ease 0.4s all;
         z-index: 100;
+        transform: translate3d($omdb-list-item-max-width + 10px, 10px, 0);
+        min-width: $omdb-list-item-max-width;
+
       }
 
-      &:hover {
-        .omdb-list-item__details {
+      //Title
+      &__title {
+        cursor: pointer;
+        display: block;
+        font-size: 1rem;
+        width: 100%;
+        text-align: center;
+        font-size: $omdb-list-item-title-font-size;
 
-          opacity: 1;
-          visibility: visible;
+        &:hover {
+          ~.omdb-content {
+            overflow: hidden;
+          }
+          ~.omdb-list-item__details {
+            opacity: 1;
+            visibility: visible;
+          }
         }
       }
+
+      //Type
+      &__type {
+        font-size: $omdb-list-item-type-font-size;
+      }
+
+
     }
   }
 }

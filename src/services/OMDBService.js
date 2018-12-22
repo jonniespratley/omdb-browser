@@ -17,7 +17,7 @@ export function xhrRequest(url, params) {
         }
       }
     });
-    xhr.open("GET", `${url}${new URLSearchParams(params).toString()}`);
+    xhr.open("GET", url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send({});
@@ -26,11 +26,10 @@ export function xhrRequest(url, params) {
 /**
  * @description I handle making a request using fetch to the API endpoint.
  * @param {String} url Endpoint url to request.
- * @param {Object} params Query parameters to send with request.
  * @returns {Promise} A promise that resolves JSON data on success.
  */
-export function fetchRequest(url, params) {
-  return fetch(new Request(`${url}&${new URLSearchParams(params).toString()}`))
+export function fetchRequest(url) {
+  return fetch(url)
     .then(response => {
       if (!response.ok) {
         throw new Error(`HTTP error, status = ${response.status}`);
@@ -40,7 +39,6 @@ export function fetchRequest(url, params) {
     .then(json => json);
 }
 
-const cache = new Map();
 
 /**
  * @class OMDBService
@@ -59,6 +57,7 @@ export default class OMDBService {
       throw new Error("Must Provide API Key!");
     }
     this.baseUrl = `http://www.omdbapi.com?apikey=${apikey}`;
+    this.cache = new Map();
   }
 
   /**
@@ -67,13 +66,14 @@ export default class OMDBService {
    * @returns {Promise} A promise that resolves JSON data on success.
    */
   request(params) {
-    let r = null;
-    if ("fetch" in window) {
-      r = fetchRequest(this.baseUrl, params);
-    } else {
-      r = xhrRequest(this.baseUrl, params)
+    const url = `${this.baseUrl}&${new URLSearchParams(params).toString()}`;
+    if (this.cache.has(url)) {
+      return Promise.resolve(this.cache.get(url));
     }
-    return r;
+    return fetchRequest(url).then(resp => {
+      this.cache.set(url, resp);
+      return resp;
+    });
   }
   /**
    * @description I search search for movies based on query.
@@ -81,16 +81,8 @@ export default class OMDBService {
    * @returns {Promise} A promise that resolves with movies on success.
    */
   getMovies(s) {
-    if (cache.has(s)) {
-      return Promise.resolve(cache.get(s));
-    }
     return this.request({
       s
-    }).then(resp => {
-      if (resp.Search) {
-        cache.set(s, resp);
-      }
-      return resp;
     });
   }
   /**
