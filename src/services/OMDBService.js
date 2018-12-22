@@ -1,13 +1,13 @@
 /**
  * @description I handle making a request using XHR to the API endpoint.
- * @param url {String} Endpoint url to request.
- * @param params {Object} Query parameters to send with request.
+ * @param {String} url Endpoint url to request.
+ * @param {Object} params Query parameters to send with request.
  * @returns {Promise} A promise that resolves JSON data on success.
  */
 export function xhrRequest(url, params) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener("readystatechange", function() {
+    xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         try {
           let json = JSON.parse(this.responseText);
@@ -25,8 +25,8 @@ export function xhrRequest(url, params) {
 }
 /**
  * @description I handle making a request using fetch to the API endpoint.
- * @param url {String} Endpoint url to request.
- * @param params {Object} Query parameters to send with request.
+ * @param {String} url Endpoint url to request.
+ * @param {Object} params Query parameters to send with request.
  * @returns {Promise} A promise that resolves JSON data on success.
  */
 export function fetchRequest(url, params) {
@@ -50,7 +50,7 @@ export function fetchRequest(url, params) {
 export default class OMDBService {
   /**
    * @constructor
-   * @param apikey {String} Your OMDB API Key
+   * @param {String} apikey Your OMDB API Key
    */
   constructor(apikey) {
     if (!apikey) {
@@ -61,12 +61,11 @@ export default class OMDBService {
 
   /**
    * @description I handle making a request to the API endpoint.
-   * @param params {Object} Query parameters to send with request.
+   * @param {Object} params Query parameters to send with request.
    * @returns {Promise} A promise that resolves JSON data on success.
    */
   request(params) {
     if ("fetch" in window) {
-      console.log("Using fetch");
       return fetchRequest(this.baseUrl, params);
     } else {
       return xhrRequest(this.baseUrl, params);
@@ -74,22 +73,20 @@ export default class OMDBService {
   }
   /**
    * @description I search search for movies based on query.
-   * @param s {String} A movie search query.
+   * @param {String} s A movie search query.
    * @returns {Promise} A promise that resolves with movies on success.
    */
   getMovies(s) {
-    console.log("getMovies", s);
     return this.request({
       s
     });
   }
   /**
    * @description I fetch movie details.
-   * @param i {String} The movie id.
+   * @param {String} i The movie id.
    * @returns {Promise} A promise that resolves with a movie on success.
    */
   getMovie(i) {
-    console.log("getMovie", i);
     return this.request({
       i
     });

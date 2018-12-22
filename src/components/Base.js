@@ -9,13 +9,10 @@ export default class Base {
     this.afterRender();
   }
   beforeRender() {
-    //console.log("Base.beforeRender");
   }
   render() {
-    console.log("Base.render", this);
     return `HTML`;
   }
   afterRender() {
-    //console.log("Base.afterRender");
   }
 }
